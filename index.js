@@ -68,6 +68,14 @@ app.post('/talker',
     return response.status(200).json(talker);
   });
 
+  app.delete('/talker/:id', isTokenValid, async (request, response) => {
+    const { id } = request.params;
+    const talkers = await getTalkers();
+    const newTalkers = talkers.filter(({ id: talkerId }) => Number(talkerId) !== Number(id));
+    await fs.writeFile('./talker.json', JSON.stringify(newTalkers));
+    return response.status(204).json(newTalkers);
+  });
+
 app.listen(PORT, () => {
   console.log('Online');
 });

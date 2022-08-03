@@ -14,6 +14,7 @@ const {
   isWatchedAtValid,
   isRateValid,
 } = require('./funcs/validadePost');
+const { getBySearch } = require('./funcs/getBySearch');
 
 const app = express();
 app.use(bodyParser.json());
@@ -24,6 +25,12 @@ const PORT = '3000';
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
+});
+
+app.get('/talker/search', isTokenValid, async (request, response) => {
+  const { q } = request.query;
+  const searchResult = await getBySearch(q);
+  return response.status(200).json(searchResult);
 });
 
 app.get('/talker', sendTalkers);

@@ -49,6 +49,25 @@ app.post('/talker',
     return response.status(201).json(talker);
   });
 
+  app.put('/talker/:id',
+  isTokenValid,
+  isNameValid,
+  isAgeValid,
+  isTalkValid,
+  isWatchedAtValid,
+  isRateValid, async (request, response) => {
+    const { name, age, talk: { watchedAt, rate } } = request.body;
+    const { id } = request.params;
+    const talkers = await getTalkers();
+    const newTalkers = talkers.filter(({ id: talkerId }) => Number(talkerId) !== Number(id));
+    await fs.writeFile('./talker.json', JSON.stringify(newTalkers));
+    const talker = { id, name, age, talk: { watchedAt, rate } };
+    talker.id = Number(newTalkers.length) + 1;
+    newTalkers.push(talker);
+    await fs.writeFile('./talker.json', JSON.stringify(newTalkers));
+    return response.status(200).json(talker);
+  });
+
 app.listen(PORT, () => {
   console.log('Online');
 });

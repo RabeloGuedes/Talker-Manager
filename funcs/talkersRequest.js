@@ -11,4 +11,4 @@ const sendTalkers = async (_request, response) => {
   response.status(200).send(talkers);
 };
 
-module.exports = { sendTalkers };
+module.exports = { sendTalkers, getTalkers };

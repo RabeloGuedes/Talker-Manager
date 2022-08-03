@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { sendTalkers } = require('./funcs/talkersRequest');
 const { sendTalker } = require('./funcs/talkerRequest');
+const { isEmailValid, isPasswordValid, getToken } = require('./funcs/loginPost');
 
 const app = express();
 app.use(bodyParser.json());
@@ -17,6 +18,9 @@ app.get('/', (_request, response) => {
 app.get('/talker', sendTalkers);
 
 app.get('/talker/:id', sendTalker);
+
+app.post('/login', isEmailValid, isPasswordValid, (_request, response) => response
+  .status(HTTP_OK_STATUS).json({ token: getToken() }));
 
 app.listen(PORT, () => {
   console.log('Online');
